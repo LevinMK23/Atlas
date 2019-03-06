@@ -16,6 +16,8 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private List<Record> records;
+    static int num;
+
 
     RecyclerViewActivity a;
 
@@ -46,6 +48,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if(isPaintLevel) viewHolder.icon.setImageResource(iconResourceId);
         else viewHolder.icon.setImageResource(R.drawable.gameover);
         viewHolder.icon.setOnClickListener(view->{
+            num = record.getNumber();
             Intent intent = new Intent(a, GameActivity.class);
             a.startActivity(intent);
         });

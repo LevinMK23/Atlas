@@ -137,11 +137,12 @@ public class GameActivity extends AppCompatActivity {
             }
             //возврат на предыдущую через диалог
             if (progress >= 10){
-                ContentValues cv = new ContentValues();
-                cv.put("level", 2);
-                cv.put("points", 1);
+                int num = RecyclerViewAdapter.num;
                 SQLiteDatabase db = getBaseContext().openOrCreateDatabase("Game", MODE_PRIVATE, null);
-                db.execSQL("INSERT INTO levels(level, points) VALUES(2, 3);");
+                ContentValues values = new ContentValues();
+                values.put("level", num);
+                values.put("points", Integer.parseInt(points.getText().toString()));
+                db.insert("levels", null, values);
                 db.close();
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Раунд завершен");

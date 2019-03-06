@@ -1,7 +1,9 @@
 package levin.ru.atlas;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,6 +37,10 @@ public class GameActivity extends AppCompatActivity {
     Random rnd;
     int a, b, c, position, progress, min, sec;
     View.OnClickListener listener;
+    FileInputStream fin;
+    FileOutputStream fout;
+    DbHelper db;
+    SQLiteDatabase base;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +54,7 @@ public class GameActivity extends AppCompatActivity {
         container = findViewById(R.id.container);
         progressBar = findViewById(R.id.progressBar);
         progress = 0;
+
         //progressBar.setMin(0);
         progressBar.setMax(10);
         min = 0; sec = 0;
@@ -124,6 +137,12 @@ public class GameActivity extends AppCompatActivity {
             }
             //возврат на предыдущую через диалог
             if (progress >= 10){
+                ContentValues cv = new ContentValues();
+                cv.put("level", 2);
+                cv.put("points", 1);
+                SQLiteDatabase db = getBaseContext().openOrCreateDatabase("Game", MODE_PRIVATE, null);
+                db.execSQL("INSERT INTO levels(level, points) VALUES(2, 3);");
+                db.close();
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("Раунд завершен");
                 builder.setMessage("Для возврата в главное меню нажмите ОК");

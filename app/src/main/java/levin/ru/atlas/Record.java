@@ -4,11 +4,19 @@ public class Record {
 
     static int cnt = 1;
 
+    private int number;
+
+
     public Record() {
+        number = cnt;
         name = "Уровень " + cnt++;
     }
 
     public enum Type {RED, GREEN, YELLOW}
+
+    public int getNumber() {
+        return number;
+    }
 
     private String name;
     private Type type;

@@ -37,10 +37,6 @@ public class GameActivity extends AppCompatActivity {
     Random rnd;
     int a, b, c, position, progress, min, sec;
     View.OnClickListener listener;
-    FileInputStream fin;
-    FileOutputStream fout;
-    DbHelper db;
-    SQLiteDatabase base;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

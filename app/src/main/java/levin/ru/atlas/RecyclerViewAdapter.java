@@ -38,13 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Record record = records.get(i);
         int iconResourceId =  R.drawable.level;
         //иф на две картинки кликабельна кнопка или нет
-        boolean isPaintLevel = false;
-        for (DbRecord rec : a.levels) {
-            if(rec.level == record.getNumber()){
-                isPaintLevel = true;
-                break;
-            }
-        }
+        boolean isPaintLevel = a.levels.containsKey(record.getNumber());
         if(isPaintLevel) viewHolder.icon.setImageResource(iconResourceId);
         else viewHolder.icon.setImageResource(R.drawable.gameover);
         viewHolder.icon.setOnClickListener(view->{

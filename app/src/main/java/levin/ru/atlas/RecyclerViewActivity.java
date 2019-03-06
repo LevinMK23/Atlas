@@ -12,6 +12,7 @@ import android.util.Log;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -19,7 +20,7 @@ public class RecyclerViewActivity extends Activity {
 
     static DbHelper db;
     static SQLiteDatabase base;
-    ArrayList<DbRecord> levels;
+    HashMap<Integer, DbRecord> levels;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,21 +28,21 @@ public class RecyclerViewActivity extends Activity {
         setContentView(R.layout.activity_recyclerview);
         Record.cnt = 1;
         List<Record> records = new ArrayList<>();
-        levels = new ArrayList<>();
+        levels = new HashMap<>();
         SQLiteDatabase db = getBaseContext().openOrCreateDatabase("Game", MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS levels (level INTEGER, points INTEGER)");
         //db.execSQL("INSERT INTO levels(level, points) VALUES(1, 10);");
         Cursor c = db.rawQuery("SELECT * FROM levels;", null);
         if(c.moveToFirst()) {
             do {
-                levels.add(new DbRecord(c.getInt(c.getColumnIndex("level")),
+                levels.put(c.getInt(c.getColumnIndex("level")), new DbRecord(c.getInt(c.getColumnIndex("level")),
                         c.getInt(c.getColumnIndex("points"))));
             } while (c.moveToNext());
         }
         db.close();
         //здесь создаем уровни
 
-        for (DbRecord record : levels) {
+        for (DbRecord record : levels.values()) {
             Log.d("LIST", record.level + " " + record.points);
         }
 

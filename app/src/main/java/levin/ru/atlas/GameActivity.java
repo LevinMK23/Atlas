@@ -19,17 +19,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Scanner;
 
 public class GameActivity extends AppCompatActivity {
 
     ImageView container;
-    Button first, second, third;
+    Button [] btn;
+    int [] rndId = {1, 2, 3};
     TextView timer, points;
     ProgressBar progressBar;
     ArrayList<CountryItem> countries;
@@ -37,6 +40,7 @@ public class GameActivity extends AppCompatActivity {
     Random rnd;
     int a, b, c, position, progress, min, sec;
     View.OnClickListener listener;
+    CountryGenerator gen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +48,10 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         timer = findViewById(R.id.timer);
         points = findViewById(R.id.points);
-        first = findViewById(R.id.first);
-        second = findViewById(R.id.second);
-        third = findViewById(R.id.third);
+        btn = new Button[3];
+        btn[0] = findViewById(R.id.first);
+        btn[1] = findViewById(R.id.second);
+        btn[2] = findViewById(R.id.third);
         container = findViewById(R.id.container);
         progressBar = findViewById(R.id.progressBar);
         progress = 0;
@@ -76,59 +81,35 @@ public class GameActivity extends AppCompatActivity {
             progressBar.setProgress(progress);
             if (button.getText().equals(countries.get(position).getName())){
                 points.setText(String.valueOf(Integer.parseInt(points.getText().toString()) + 1));
-                int tmp = a;
-                a = b;
-                b = c;
-                c = tmp;
-                first.setText(names.get(a));
-                second.setText(names.get(b));
-                third.setText(names.get(c));
-                int position = rnd.nextInt(countries.size());
-                while (countries.get(position).isVisit()) {
-                    int cnt = 0;
-                    for (int i = 0; i < countries.size(); i++) {
-                        if (!countries.get(i).isVisit()) cnt++;
-                    }
-                    if(cnt == 0) {
-                        position = 100;
-                        break;
-                    }
-                    position = rnd.nextInt(countries.size());
-                }
-                if(position == 100){
+                for (int i = 0; i < 3; i++) btn[i].setText("");
+                int ok = rnd.nextInt(3);
+                int position = gen.next();
+                if(position == 1000){
                     container.setImageResource(R.drawable.gameover);
                 }
                 else {
                     countries.get(position).setVisit(true);
                     container.setImageResource(countries.get(position).getId());
+                }
+                for (int i = 0; i < 3; i++) {
+                    if(btn[i].getText().toString().isEmpty())
+                        btn[i].setText(countries.get(gen.next()).getName());
                 }
             }
             else {
-                int tmp = a;
-                a = b;
-                b = c;
-                c = tmp;
-                first.setText(names.get(a));
-                second.setText(names.get(b));
-                third.setText(names.get(c));
-                int position = rnd.nextInt(countries.size());
-                while (countries.get(position).isVisit()) {
-                    int cnt = 0;
-                    for (int i = 0; i < countries.size(); i++) {
-                        if (!countries.get(i).isVisit()) cnt++;
-                    }
-                    if(cnt == 0) {
-                        position = 100;
-                        break;
-                    }
-                    position = rnd.nextInt(countries.size());
-                }
-                if(position == 100){
+                for (int i = 0; i < 3; i++) btn[i].setText("");
+                int ok = rnd.nextInt(3);
+                int position = gen.next();
+                if(position == 1000){
                     container.setImageResource(R.drawable.gameover);
                 }
                 else {
                     countries.get(position).setVisit(true);
                     container.setImageResource(countries.get(position).getId());
+                }
+                for (int i = 0; i < 3; i++) {
+                    if(btn[i].getText().toString().isEmpty())
+                        btn[i].setText(countries.get(gen.next()).getName());
                 }
             }
             //возврат на предыдущую через диалог
@@ -153,28 +134,31 @@ public class GameActivity extends AppCompatActivity {
         countries = new ArrayList<>();
         names = new ArrayList<>();
         rnd = new Random();
-        position = 0;
-
-        for (int i = 1; i < 4; i++) {
+        InputStream inputStream = getResources().openRawResource(R.raw.levels);
+        Scanner in = new Scanner(inputStream);
+        while (in.hasNextLine()) names.add(in.nextLine());
+        for (int i = 1; i < 200; i++) {
             countries.add(new CountryItem(getResources()
                     .getIdentifier("r" + String.valueOf(i),
                             "drawable",
-                            "levin.ru.atlas")));
+                            "levin.ru.atlas"), names.get(i-1)));
         }
-        countries.get(0).setName("France");
-        names.addAll(Arrays.asList("France", "Russia", "USA"));
-        countries.get(1).setName("Russia");
-        countries.get(2).setName("USA");
+        gen = new CountryGenerator(countries);
+        position = gen.next();
+        CountryItem tmp = countries.get(position);
+        tmp.setVisit(true);
         container.setImageResource(countries.get(position).getId());
-        a = 0; b = 1; c = 2;
-
-        first.setOnClickListener(listener);
-        second.setOnClickListener(listener);
-        third.setOnClickListener(listener);
-        first.setText(names.get(a));
-        second.setText(names.get(b));
-        third.setText(names.get(c));
+        for (int i = 0; i < 3; i++){
+            btn[i].setOnClickListener(listener);
+            btn[i].setText("");
+        }
+        int ok = rnd.nextInt(3);
+        btn[ok].setText(tmp.getName());
+        for (int i = 0; i < 3; i++) {
+            if(btn[i].getText().toString().isEmpty()){
+                btn[i].setText(countries.get(gen.next()).getName());
+            }
+        }
     }
-
 
 }

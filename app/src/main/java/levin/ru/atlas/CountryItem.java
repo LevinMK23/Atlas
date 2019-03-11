@@ -8,9 +8,10 @@ public class CountryItem {
     private boolean visit;
     private String name;
 
-    public CountryItem(int id) {
+    public CountryItem(int id, String name) {
         this.id = id;
         visit = false;
+        this.name = name;
     }
 
     public String getName() {

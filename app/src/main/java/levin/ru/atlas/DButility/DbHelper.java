@@ -1,11 +1,11 @@
-package levin.ru.atlas;
+package levin.ru.atlas.DButility;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-class DbHelper extends SQLiteOpenHelper {
+public class DbHelper extends SQLiteOpenHelper {
 
     public DbHelper(Context context) {
         // конструктор суперкласса

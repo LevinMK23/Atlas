@@ -2,24 +2,26 @@ package levin.ru.atlas;
 
 public class Record {
 
-    static int cnt = 1;
+    public static int cnt = 1;
 
     private int number;
+    int points;
 
-
-    public Record() {
+    public Record(int points) {
         number = cnt;
         name = "Уровень " + cnt++;
+        this.points = points;
     }
 
-    public enum Type {RED, GREEN, YELLOW}
+    public int getPoints() {
+        return points;
+    }
 
     public int getNumber() {
         return number;
     }
 
     private String name;
-    private Type type;
 
     public String getName() {
         return name;
@@ -29,18 +31,4 @@ public class Record {
 
     }
 
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public Record copy(){
-        Record copy = new Record();
-        copy.setType(type);
-        copy.setName(name);
-        return copy;
-    }
 }

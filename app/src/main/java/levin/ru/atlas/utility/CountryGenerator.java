@@ -1,7 +1,9 @@
-package levin.ru.atlas;
+package levin.ru.atlas.utility;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import levin.ru.atlas.CountryItem;
 
 public class CountryGenerator {
 
@@ -22,7 +24,7 @@ public class CountryGenerator {
         return list;
     }
 
-    int next(){
+    public int next(){
         int position = r.nextInt(list.size()), cnt = 0;
         while (list.get(position).isVisit()){
             cnt++;
@@ -30,6 +32,8 @@ public class CountryGenerator {
             if(cnt > list.size()) return 1000;
         }
         list.get(position).setVisit(true);
-        return position;
+        if(list.get(position).getId() != -1)
+            return position;
+        else return next();
     }
 }

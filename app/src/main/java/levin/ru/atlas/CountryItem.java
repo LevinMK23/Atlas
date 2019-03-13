@@ -15,10 +15,12 @@ public class CountryItem {
         id = -1;
     }
 
-    public CountryItem(int id, String name) {
+    public CountryItem(int id, String name, String capital, String continent) {
         this.id = id;
         visit = false;
         country = name;
+        this.capital = capital;
+        this.continent = continent;
     }
 
     public void setId(int id) {

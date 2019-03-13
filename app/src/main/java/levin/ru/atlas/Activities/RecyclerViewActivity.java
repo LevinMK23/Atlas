@@ -2,6 +2,7 @@ package levin.ru.atlas.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,4 +88,8 @@ public class RecyclerViewActivity extends Activity {
         }
     }
 
+    public void goToStartActivity(View view) {
+        Intent intent = new Intent(this, StartActivity.class);
+        startActivity(intent);
+    }
 }

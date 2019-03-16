@@ -25,7 +25,7 @@
         <activity android:name=".Activities.RecyclerViewActivity">
             <intent-filter >
                 <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.OPENABLE" />
             </intent-filter>
         </activity>
         <activity android:name=".Activities.GameActivity">

@@ -1,6 +1,5 @@
-package levin.ru.atlas;
+package levin.ru.atlas.utility;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,17 +12,23 @@ import java.util.List;
 
 import levin.ru.atlas.Activities.GameActivity;
 import levin.ru.atlas.Activities.RecyclerViewActivity;
+import levin.ru.atlas.DButility.DBLevel;
+import levin.ru.atlas.LevelConfig.Level;
+import levin.ru.atlas.LevelConfig.LevelConfig;
+import levin.ru.atlas.R;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private List<Record> records;
+    private List<Level> records;
     public static int num;
-
+    public static Level clickedDBLevel;
+    LevelConfig config;
     RecyclerViewActivity a;
 
-    public RecyclerViewAdapter(RecyclerViewActivity a, List<Record> records) {
+    public RecyclerViewAdapter(RecyclerViewActivity a, List<Level> records, LevelConfig config) {
         this.a = a;
         this.records = records;
+        this.config = config;
     }
 
     @Override
@@ -32,18 +37,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new ViewHolder(a, v);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        //на рекорд флажок клек не клик
-        Record record = records.get(i);
-//        if (record.getNumber() > 9){
-//            RecyclerViewActivity.recordCounter += 5;
-//        }
-        //иф на две картинки кликабельна кнопка или нет
-        boolean isPaintLevel = a.levels.containsKey(record.getNumber());
-        if(isPaintLevel) {
-            int points = record.points;
+        Level level = records.get(i);
+        if(level.getPoints() > -1) {
+            int points = level.getPoints();
             if(points < 3){
                 viewHolder.icon.setImageResource(R.drawable.state0);
             }
@@ -56,14 +54,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             else{
                 viewHolder.icon.setImageResource(R.drawable.state3);
             }
-            viewHolder.name.setText(record.getName() + " завершен");
+            viewHolder.name.setText("Level " + level.getId() + " finished");
         }
         else {
             viewHolder.icon.setImageResource(R.drawable.newlevel);
-            viewHolder.name.setText(record.getName());
+            viewHolder.name.setText("Level " + level.getId());
         }
         viewHolder.icon.setOnClickListener(view->{
-            num = record.getNumber();
+            config.setClickedLevel(level);
             Intent intent = new Intent(a, GameActivity.class);
             a.startActivity(intent);
         });
@@ -72,12 +70,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return records.size();
-    }
-
-    private void delete(Record record) {
-        int position = records.indexOf(record);
-        records.remove(position);
-        notifyItemRemoved(position);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -92,17 +84,4 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-
-    private class DeleteButtonListener implements View.OnClickListener {
-        private Record record;
-
-        @Override
-        public void onClick(View v) {
-            delete(record);
-        }
-
-        public void setRecord(Record record) {
-            this.record = record;
-        }
-    }
 }

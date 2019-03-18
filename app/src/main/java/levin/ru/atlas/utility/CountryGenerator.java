@@ -1,7 +1,11 @@
 package levin.ru.atlas.utility;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Random;
+import java.util.TreeSet;
 
 import levin.ru.atlas.CountryItem;
 
@@ -9,15 +13,25 @@ public class CountryGenerator {
 
     private ArrayList<CountryItem> list;
     private Random r;
-
+    private TreeSet<CountryItem> set;
+    private CountryItem tmp;
 
     public CountryGenerator(ArrayList<CountryItem> list) {
         this.list = list;
         r = new Random();
+        set = new TreeSet<>((o1, o2) -> o1.getName().compareTo(o2.getName()));
+        set.addAll(list);
+        int cnt = 0;
+        for (CountryItem countryItem : set) {
+            countryItem.setPos(cnt);
+            cnt++;
+        }
     }
 
     public void setList(ArrayList<CountryItem> list) {
         this.list = list;
+        set.clear();
+        set.addAll(list);
     }
 
     public ArrayList<CountryItem> getList() {
@@ -25,27 +39,21 @@ public class CountryGenerator {
     }
 
     public int next(){
-        int position = r.nextInt(list.size()), cnt = 0;
-        while (list.get(position).isVisit()){
-            cnt++;
-            position = (position + 1) % list.size();
-            if(cnt > list.size()) return 1000;
-        }
-        list.get(position).setVisit(true);
-        if(list.get(position).getId() != -1)
-            return position;
-        else return next();
+        tmp = set.pollFirst();
+        return tmp.getPos();
     }
 
+    static int cnt = 0;
+
     public int nextWithoutBlocking(){
-        int position = r.nextInt(list.size()), cnt = 0;
-        while (list.get(position).isVisit()){
-            cnt++;
-            position = (position + 1) % list.size();
-            if(cnt > list.size()) return 1000;
+        ArrayList<CountryItem> list = new ArrayList<>(set);
+        int p1 = r.nextInt(list.size()), p2 = r.nextInt(list.size());
+        if(p1 != p2){
+            if(cnt++ % 2 == 0) return p1;
+            else{
+                return p2;
+            }
         }
-        if(list.get(position).getId() != -1)
-            return position;
-        else return next();
+        return 0;
     }
 }

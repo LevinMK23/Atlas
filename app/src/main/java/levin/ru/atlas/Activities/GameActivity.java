@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -168,10 +169,12 @@ public class GameActivity extends AppCompatActivity {
                 line[i] = line[i].trim();
             }
             if(line.length == 3)
+                line[2] = line[2].replaceAll(" ", "");
+                Log.d("Line", Arrays.toString(line));
                 countries.add(new CountryItem(getResources()
                         .getIdentifier("r" + String.valueOf(cnt),
                                 "drawable",
-                                "levin.ru.atlas"), line[0], line[1], line[2]));
+                                "levin.ru.atlas"), cnt, line[0], line[1], line[2]));
             cnt++;
         }
         map = new TreeMap<>();

@@ -48,7 +48,7 @@ public class StartActivity extends AppCompatActivity {
                 TintIcons.tintImageView(img[i], R.color.colorAccent);
             }
         }
-        intent = new Intent(this, RecyclerViewActivity.class);
+        intent = new Intent(this, ChoiceActivity.class);
         click = v -> {
                 switch (v.getId()){
                     case R.id.africa:
